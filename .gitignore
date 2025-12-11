@@ -1,0 +1,36 @@
+# Ignore docs and testing folders
+docs/
+testing/
+
+# Ignore markdown files in root directory only
+/*.md
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Results and data (optional - uncomment if needed)
+results/
+data/raw/
+

@@ -1,0 +1,75 @@
+# Thresholds
+thresholds:
+  faithfulness_min: 0.65
+  coverage_min: 0.5
+  compression_max: 0.5
+  fluency_ratio_min: 0.5
+  hallucination_similarity_min: 0.6
+
+# Model parameters
+extractive:
+  model_name: "vinai/phobert-base"
+  initial_k: 3
+  max_k: 6
+  max_length: 256  # Max tokens per sentence
+  strategy: "mmr"  # "similarity", "mmr" (RECOMMENDED), or "textrank"
+  lambda_param: 0.7  # MMR parameter: 0.5 = balanced, >0.5 = prefer relevance
+  device: null  # "cuda", "cpu", or null for auto-detect
+  
+  # Position weighting - set to false for best results with MMR
+  use_position_weights: false  # MMR works best WITHOUT position weights
+  position_strategy: "inverse_pyramid"  # "inverse_pyramid", "linear_decay", or "uniform"
+  
+  # TextRank parameters (alternative strategy)
+  textrank_damping: 0.85  # Damping factor for PageRank
+  textrank_max_iter: 100  # Max iterations
+  textrank_tol: 1.0e-6    # Convergence tolerance
+  
+abstractive:
+  model_name: "VietAI/vit5-base-vietnews-summarization"  # Fine-tuned for Vietnamese news
+  max_input_length: 512  # Max tokens for input (will truncate if longer)
+  max_output_length: 128  # Max tokens for generated summary
+  min_output_length: 20   # Min tokens for generated summary
+  
+  # Generation parameters (standard - fine-tuned model works well with defaults)
+  num_beams: 4            # Beam search (4 = good balance speed/quality)
+  length_penalty: 1.0     # Penalty for length (1.0 = no penalty)
+  no_repeat_ngram_size: 3 # Avoid repeating 3-grams
+  early_stopping: true    # Stop when finding good beam
+  
+  device: null           # "cuda", "cpu", or null for auto-detect
+  
+  # NOTE: Using fine-tuned model provides excellent quality without
+  # needing aggressive generation parameters (repetition_penalty, etc.)
+
+# Evaluator configuration
+evaluator:
+  bert_model: "vinai/phobert-base"  # PhoBERT for BERTScore
+  device: null  # "cuda", "cpu", or null for auto-detect
+  hallucination_threshold: 0.6  # Similarity threshold for hallucination detection
+
+# Iterative loop
+iteration:
+  max_iterations: 3
+  min_improvement: 0.03  # 3%
+  early_stop_patience: 2
+
+# Weights for hybrid score
+weights:
+  rouge: 0.4
+  bertscore: 0.6
+
+# Data paths
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  splits_dir: "data/splits"
+  results_dir: "results"
+
+# Dataset split ratios
+split:
+  train: 0.8
+  val: 0.1
+  test: 0.1
+  random_state: 42
+
